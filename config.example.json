@@ -1,0 +1,6 @@
+[
+    {
+        "path": "/ruta/a/la/carpeta/de/subtitulos",
+        "auth-key": "tu-clave-de-la-api-de-deepl"
+    }
+]
