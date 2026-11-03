@@ -1,0 +1,17 @@
+# Configuración local: contiene la clave de la API de DeepL.
+config.json
+
+# Entornos virtuales
+env/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editor y sistema operativo
+.vscode/
+.DS_Store
