@@ -3,7 +3,7 @@ name = "subplex"
 version = "1.0.0"
 description = "Traduce subtítulos SRT con la API de DeepL."
 requires-python = ">=3.10"
-dependencies = ["deepl>=1.17"]
+dependencies = ["deepl>=1.21"]
 
 [dependency-groups]
 dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.11"]

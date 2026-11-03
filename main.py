@@ -23,7 +23,7 @@ import deepl  # cliente oficial de la API de DeepL.
 CONFIG_FILE = Path("config.json")
 SRT_EXTENSION = ".srt"
 MUSIC_SYMBOL = "♪"
-SUBTITLE_NAME = "All Of Us Strangers.srt"
+SUBTITLE_NAME = "Sense And Sensibility.srt"
 TARGET_LANGUAGE = "ES"
 
 
@@ -110,7 +110,7 @@ def parse_srt(lines: Iterable[str]) -> Iterator[SubtitleBlock]:
 
 
 def translate_blocks(
-    blocks: Iterable[SubtitleBlock], translator: deepl.Translator, language: str
+    blocks: Iterable[SubtitleBlock], translator: deepl.DeepLClient, language: str
 ) -> Iterator[SubtitleBlock]:
     """Traduce cada línea de texto por separado, conservando secuencia y tiempos."""
     for block in blocks:
@@ -138,7 +138,7 @@ def output_path(source: Path, language: str) -> Path:
 
 
 def translate_file(
-    name: str, language: str, config: Config, translator: deepl.Translator
+    name: str, language: str, config: Config, translator: deepl.DeepLClient
 ) -> Path:
     """Traduce el subtítulo `name` a `language` y lo guarda junto al original.
 
@@ -169,7 +169,7 @@ def main() -> int:
     """Punto de entrada: ensambla dependencias y devuelve el código de salida."""
     try:
         config = load_config()
-        translator = deepl.Translator(config.auth_key)
+        translator = deepl.DeepLClient(config.auth_key)
         target = translate_file(SUBTITLE_NAME, TARGET_LANGUAGE, config, translator)
     except (SubplexError, OSError, deepl.DeepLException) as err:
         print(f"Error occurred: {err}", file=sys.stderr)

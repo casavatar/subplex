@@ -26,7 +26,7 @@ class FakeTextResult:
 
 
 class FakeTranslator:
-    """Sustituye a deepl.Translator: no usa red y registra cada llamada."""
+    """Sustituye a deepl.DeepLClient: no usa red y registra cada llamada."""
 
     instances: ClassVar[list["FakeTranslator"]] = []
 
@@ -36,7 +36,7 @@ class FakeTranslator:
         FakeTranslator.instances.append(self)
 
     def translate_text(self, text: str, target_lang: str) -> FakeTextResult:
-        # Reproduce la validación real de deepl 1.17 (translator.py:396).
+        # Reproduce la validación real de deepl (ValueError con texto vacío).
         if not text:
             raise ValueError("text must not be empty")
         self.calls.append((text, target_lang))
@@ -273,7 +273,7 @@ def app_dir(tmp_path, subs, monkeypatch):
     write_config(tmp_path, [{"path": str(subs), "auth-key": "fake-key"}])
     monkeypatch.chdir(tmp_path)
     FakeTranslator.instances = []
-    monkeypatch.setattr(main.deepl, "Translator", FakeTranslator)
+    monkeypatch.setattr(main.deepl, "DeepLClient", FakeTranslator)
     return tmp_path
 
 
@@ -282,7 +282,7 @@ def test_main_success_returns_zero(app_dir, subs, capsys):
 
     assert main.main() == 0
 
-    target = subs / "All Of Us Strangers_ES.srt"
+    target = main.output_path(subs / main.SUBTITLE_NAME, main.TARGET_LANGUAGE)
     assert target.exists()
     assert [t.auth_key for t in FakeTranslator.instances] == ["fake-key"]
     out = capsys.readouterr()
